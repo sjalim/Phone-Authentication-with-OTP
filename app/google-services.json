@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "421520463206",
+    "firebase_url": "https://alim-443b2.firebaseio.com",
+    "project_id": "alim-443b2",
+    "storage_bucket": "alim-443b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421520463206:android:9889f5390d5002699864a7",
+        "android_client_info": {
+          "package_name": "com.example.alim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421520463206-cu0ie0h4fpm9ri7v1r1hp56k8bb0i2ht.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDvFbpRV0x1FDpp7uqGAgBW1sk_PxXcAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421520463206-cu0ie0h4fpm9ri7v1r1hp56k8bb0i2ht.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
