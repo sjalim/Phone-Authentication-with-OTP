@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+
+    tools:context=".registerActivity">
+
+
+    <TextView
+        android:layout_width="304dp"
+        android:layout_height="33dp"
+        android:text="Register"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="279dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Name:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/ageEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:ems="10"
+        android:hint="Age:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/addressEditText"
+        android:layout_width="283dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Address:"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_width="317dp"
+        android:layout_height="61dp"
+        android:text="Sign Up" />
+</LinearLayout>

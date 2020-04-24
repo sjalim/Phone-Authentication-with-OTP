@@ -76,7 +76,7 @@ public class otpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            senduserHome();
+                            registerPage();
                         }else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException){
                                 Toast.makeText(getApplicationContext(),"Error in Verifying OTP",Toast.LENGTH_LONG).show();
@@ -98,9 +98,18 @@ public class otpActivity extends AppCompatActivity {
 
     }
 
-    private void senduserHome(){
+    private void senduserHome() {  Log.d("Print","6");
+        Intent homeIntent = new Intent(otpActivity.this,MainActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeIntent);
+        finish();
+    }
+
+
+    private void registerPage(){
         Log.d("Print","9");
-        Intent HomeiNtent = new Intent(otpActivity.this,MainActivity.class);
+        Intent HomeiNtent = new Intent(otpActivity.this,registerActivity.class);
         HomeiNtent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         HomeiNtent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(HomeiNtent);
