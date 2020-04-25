@@ -1,6 +1,9 @@
 package com.example.alim;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +15,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder> implements Filterable {
 
@@ -115,6 +123,33 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
         public ListViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    Fragment itemFragment =  CultivationItemDetails.newInstance("","");
+                    if(itemFragment!=null) {
+
+                        FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                        Bundle args = new Bundle();
+
+                        args.putString("pass", title.getText().toString());
+                        itemFragment.setArguments(args);
+
+                        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
+                        fragmentTransaction.replace(R.id.container, itemFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                    else
+                    {
+                        Log.d("error","null exception");
+                    }
+                }
+            });
 
             itemContainer = itemView.findViewById(R.id.item_container);
             title = itemView.findViewById(R.id.text_view_item_title);

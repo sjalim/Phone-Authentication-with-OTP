@@ -1,9 +1,7 @@
 package com.example.alim;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.ViewModelProviders;
 
-import android.app.LauncherActivity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,8 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -54,13 +51,19 @@ public class CultivationFragment extends Fragment {
         searchInput.setBackgroundResource(R.drawable.search_input_style);
         rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
         mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("kola",R.raw.apple));
+        mData.add(new CustomListItem("Jack fruit",R.raw.jackfruit));
+        mData.add(new CustomListItem("Ladies Finger",R.raw.ladies_finger));
+        mData.add(new CustomListItem("Peanut",R.raw.peanut));
+        mData.add(new CustomListItem("Potato",R.raw.potato));
+        mData.add(new CustomListItem("Red Amarnath",R.raw.red_amarnath));
+        mData.add(new CustomListItem("Tomato",R.raw.tomato));
         mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("Apple",R.raw.apple));
+        mData.add(new CustomListItem("Jack fruit",R.raw.jackfruit));
+        mData.add(new CustomListItem("Ladies Finger",R.raw.ladies_finger));
+        mData.add(new CustomListItem("Peanut",R.raw.peanut));
+        mData.add(new CustomListItem("Potato",R.raw.potato));
+        mData.add(new CustomListItem("Red Amarnath",R.raw.red_amarnath));
+        mData.add(new CustomListItem("Tomato",R.raw.tomato));
 
 
         cultivationListAdapter = new ListAdapter(this.getContext(),mData);
