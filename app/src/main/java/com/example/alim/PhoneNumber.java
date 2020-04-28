@@ -133,7 +133,7 @@ public class PhoneNumber extends AppCompatActivity {
 
     private void sendUserhome(){
         Log.d("Print","6");
-        Intent homeIntent = new Intent(PhoneNumber.this,MainActivity.class);
+        Intent homeIntent = new Intent(PhoneNumber.this,exploreActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);

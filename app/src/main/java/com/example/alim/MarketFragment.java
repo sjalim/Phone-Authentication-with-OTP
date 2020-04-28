@@ -6,6 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +22,7 @@ public class MarketFragment extends Fragment {
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
   private static final String ARG_PARAM1 = "param1";
   private static final String ARG_PARAM2 = "param2";
+  private FloatingActionButton floatingAddNewItemButton;
 
   // TODO: Rename and change types of parameters
   private String mParam1;
@@ -57,6 +63,23 @@ public class MarketFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_market, container, false);
+    View contentView =inflater.inflate(R.layout.fragment_market, container, false);
+      floatingAddNewItemButton = contentView.findViewById(R.id.floatingActionButton);
+      floatingAddNewItemButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Fragment fragment = new AddNewItemFragment();
+          FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+          fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
+          fragmentTransaction.replace(R.id.container, fragment);
+          fragmentTransaction.addToBackStack(null);
+          fragmentTransaction.commit();
+
+        }
+      });
+
+    return contentView;
   }
 }

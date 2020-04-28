@@ -1,12 +1,12 @@
 package com.example.alim;
 
-public class CustomListItem {
+public class CustomListItem_Cultivation {
 
 
     String Title;
     int userPhoto;
 
-    public CustomListItem(String title, int userPhoto) {
+    public CustomListItem_Cultivation(String title, int userPhoto) {
         Title = title;
         this.userPhoto = userPhoto;
     }

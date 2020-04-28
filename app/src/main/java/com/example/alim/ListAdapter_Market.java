@@ -1,6 +1,6 @@
 package com.example.alim;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,15 +23,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder> implements Filterable {
+public class ListAdapter_Market extends RecyclerView.Adapter<ListAdapter_Market.ListViewHolder> implements Filterable {
 
     Context mContext;
-    List<CustomListItem> mData;
-    List<CustomListItem> mDataFiltered;
+    List<CustomListItem_Market> mData;
+    List<CustomListItem_Market> mDataFiltered;
 
-    public ListAdapter(Context mContext, List<CustomListItem> mData) {
+    public ListAdapter_Market(Context mContext, List<CustomListItem_Market> mData) {
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
@@ -52,8 +51,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
                 }
                 else {
-                    List<CustomListItem> lstFiltered = new ArrayList<>();
-                    for (CustomListItem row : mData) {
+                    List<CustomListItem_Market> lstFiltered = new ArrayList<>();
+                    for (CustomListItem_Market row : mData) {
 
                         if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
                             lstFiltered.add(row);
@@ -76,7 +75,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
 
-                mDataFiltered = (List<CustomListItem>) results.values;
+                mDataFiltered = (List<CustomListItem_Market>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -88,26 +87,26 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
     @NonNull
     @Override
-    public ListAdapter.ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListAdapter_Market.ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
 
 
         View layout;
-        layout = LayoutInflater.from(mContext).inflate(R.layout.customlist_item,parent,false);
+        layout = LayoutInflater.from(mContext).inflate(R.layout.customlist_item_cultivation,parent,false);
         return new ListViewHolder(layout);
 
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListAdapter.ListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListAdapter_Market.ListViewHolder holder, int position) {
         holder.imageView.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
         holder.itemContainer.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
 
 
         holder.title.setText(mDataFiltered.get(position).getTitle());
-        holder.imageView.setImageResource(mDataFiltered.get(position).getUserPhoto());
+//        holder.imageView.setImageResource(mDataFiltered.get(position).getUserPhoto());
 
     }
 
@@ -151,7 +150,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
                 }
             });
 
-            itemContainer = itemView.findViewById(R.id.item_container);
+            itemContainer = itemView.findViewById(R.id.item_container_cultivation);
             title = itemView.findViewById(R.id.text_view_item_title);
             imageView = itemView.findViewById(R.id.image_view_item);
         }

@@ -25,8 +25,8 @@ import java.util.List;
 public class CultivationFragment extends Fragment {
 
     RecyclerView CultivationRecylerView;
-    ListAdapter cultivationListAdapter;
-    List<CustomListItem> mData;
+    ListAdapter_Cultivation cultivationListAdapterCultivation;
+    List<CustomListItem_Cultivation> mData;
     ConstraintLayout rootLayout;
     EditText searchInput;
     CharSequence search = "";
@@ -50,24 +50,24 @@ public class CultivationFragment extends Fragment {
 
         searchInput.setBackgroundResource(R.drawable.search_input_style);
         rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
-        mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("Jack fruit",R.raw.jackfruit));
-        mData.add(new CustomListItem("Ladies Finger",R.raw.ladies_finger));
-        mData.add(new CustomListItem("Peanut",R.raw.peanut));
-        mData.add(new CustomListItem("Potato",R.raw.potato));
-        mData.add(new CustomListItem("Red Amarnath",R.raw.red_amarnath));
-        mData.add(new CustomListItem("Tomato",R.raw.tomato));
-        mData.add(new CustomListItem("Apple",R.raw.apple));
-        mData.add(new CustomListItem("Jack fruit",R.raw.jackfruit));
-        mData.add(new CustomListItem("Ladies Finger",R.raw.ladies_finger));
-        mData.add(new CustomListItem("Peanut",R.raw.peanut));
-        mData.add(new CustomListItem("Potato",R.raw.potato));
-        mData.add(new CustomListItem("Red Amarnath",R.raw.red_amarnath));
-        mData.add(new CustomListItem("Tomato",R.raw.tomato));
+        mData.add(new CustomListItem_Cultivation("Apple",R.raw.apple));
+        mData.add(new CustomListItem_Cultivation("Jack fruit",R.raw.jackfruit));
+        mData.add(new CustomListItem_Cultivation("Ladies Finger",R.raw.ladies_finger));
+        mData.add(new CustomListItem_Cultivation("Peanut",R.raw.peanut));
+        mData.add(new CustomListItem_Cultivation("Potato",R.raw.potato));
+        mData.add(new CustomListItem_Cultivation("Red Amarnath",R.raw.red_amarnath));
+        mData.add(new CustomListItem_Cultivation("Tomato",R.raw.tomato));
+        mData.add(new CustomListItem_Cultivation("Apple",R.raw.apple));
+        mData.add(new CustomListItem_Cultivation("Jack fruit",R.raw.jackfruit));
+        mData.add(new CustomListItem_Cultivation("Ladies Finger",R.raw.ladies_finger));
+        mData.add(new CustomListItem_Cultivation("Peanut",R.raw.peanut));
+        mData.add(new CustomListItem_Cultivation("Potato",R.raw.potato));
+        mData.add(new CustomListItem_Cultivation("Red Amarnath",R.raw.red_amarnath));
+        mData.add(new CustomListItem_Cultivation("Tomato",R.raw.tomato));
 
 
-        cultivationListAdapter = new ListAdapter(this.getContext(),mData);
-        CultivationRecylerView.setAdapter(cultivationListAdapter);
+        cultivationListAdapterCultivation = new ListAdapter_Cultivation(this.getContext(),mData);
+        CultivationRecylerView.setAdapter(cultivationListAdapterCultivation);
         CultivationRecylerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -80,7 +80,7 @@ public class CultivationFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
 
-                cultivationListAdapter.getFilter().filter(s);
+                cultivationListAdapterCultivation.getFilter().filter(s);
                 search = s;
 
 

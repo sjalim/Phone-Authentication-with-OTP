@@ -9,15 +9,15 @@
 
 
    <RelativeLayout
-       android:paddingBottom="16dp"
-       android:id="@+id/item_container"
-       android:layout_width="0dp"
-       android:layout_height="wrap_content"
+       android:id="@+id/item_container_cultivation"
+       android:layout_width="390dp"
+       android:layout_height="62dp"
        android:layout_marginStart="24dp"
-       android:layout_marginLeft="24dp"
        android:background="@color/card_bg_color"
+       android:paddingBottom="16dp"
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.0"
        app:layout_constraintStart_toStartOf="parent">
 
       <TextView
@@ -28,9 +28,9 @@
           android:layout_alignParentStart="true"
           android:layout_alignParentLeft="true"
           android:layout_alignParentTop="true"
-          android:layout_marginStart="40dp"
-          android:layout_marginLeft="40dp"
-          android:layout_marginTop="20dp"
+          android:layout_marginStart="45dp"
+          android:layout_marginLeft="45dp"
+          android:layout_marginTop="3dp"
           android:text="Simple Title Text "
           android:textColor="@color/title_text_color"
           android:textStyle="bold" />
@@ -40,13 +40,11 @@
 
    <ImageView
        android:id="@+id/image_view_item"
-       android:layout_width="36dp"
-       android:layout_height="36dp"
+       android:layout_width="48dp"
+       android:layout_height="63dp"
        android:layout_marginStart="8dp"
-       android:layout_marginLeft="8dp"
        android:layout_marginTop="16dp"
        android:layout_marginEnd="8dp"
-       android:layout_marginRight="8dp"
        app:layout_constraintEnd_toStartOf="@+id/container"
        app:layout_constraintStart_toStartOf="@+id/container"
        app:layout_constraintTop_toTopOf="@+id/container"

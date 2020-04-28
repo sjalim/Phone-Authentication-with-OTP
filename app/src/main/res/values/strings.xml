@@ -6,4 +6,36 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    
+    <string-array name="region">
+
+        <item>Dhaka</item>
+        <item>Sylhet</item>
+        <item>Ctg</item>
+        <item>Barisal</item>
+
+    </string-array>
+
+    <string-array name="Dhaka_area">
+        <item>Mirpur</item>
+        <item>Uttara</item>
+        <item>Dhanmondi</item>
+    </string-array>
+
+    <string-array name="sylhet_area">
+        <item>Mirpur1</item>
+        <item>Uttara1</item>
+        <item>Dhanmondi1</item>
+    </string-array>
+
+    <string-array name="category">
+
+        <item>Preservative</item>
+        <item>Crops</item>
+        <item>Instrument</item>
+
+
+    </string-array>
+
 </resources>
