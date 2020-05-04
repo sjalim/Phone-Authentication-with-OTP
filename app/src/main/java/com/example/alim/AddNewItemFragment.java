@@ -37,6 +37,7 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -100,6 +101,8 @@ public class AddNewItemFragment extends Fragment  {
     int productId ;
 
     private String productIdString;
+    private String imageUriString;
+    private String imageUriString1;
 
 
 
@@ -159,7 +162,7 @@ public class AddNewItemFragment extends Fragment  {
 
         editTextTitle = contentView.findViewById(R.id.editText_title);
         editTextPrice = contentView.findViewById(R.id.editText_price);
-        editTextDescription  = contentView.findViewById(R.id.editText_description);
+        editTextDescription = contentView.findViewById(R.id.editText_description);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -177,13 +180,13 @@ public class AddNewItemFragment extends Fragment  {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 productId = Integer.parseInt(documentSnapshot.getString("id"));
 
-                productIdString =  Integer.toString(productId);
-                Log.d("checked",productIdString);
+                productIdString = Integer.toString(productId);
+                Log.d("checked", productIdString);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("checked","Id collection open failed");
+                Log.d("checked", "Id collection open failed");
             }
         });
 
@@ -191,47 +194,44 @@ public class AddNewItemFragment extends Fragment  {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                        {
-                            if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                                Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_LONG).show();
-                                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_LONG).show();
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
-                            } else {
-                                choseImage();
-                                calledChoose =1;
-                            }
-                        } else {
-                            choseImage();
+                    } else {
+                        choseImage();
+                        calledChoose = 1;
+                    }
+                } else {
+                    choseImage();
 
-                            calledChoose =1;
-                        }
+                    calledChoose = 1;
+                }
 
             }
         });
         imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                {
-                    if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_LONG).show();
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
                     } else {
                         choseImage();
 
-                        calledChoose =2;
+                        calledChoose = 2;
                     }
                 } else {
                     choseImage();
 
-                    calledChoose =2;
+                    calledChoose = 2;
                 }
 
             }
         });
-
 
 
         region = getResources().getStringArray(R.array.region);
@@ -247,7 +247,7 @@ public class AddNewItemFragment extends Fragment  {
         spinnerRegion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),region[position], Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), region[position], Toast.LENGTH_SHORT);
                 pos = position;
             }
 
@@ -258,18 +258,14 @@ public class AddNewItemFragment extends Fragment  {
         });
 
 
-
-        if(pos ==0)
-        {
-            ArrayAdapter adapter1 = new ArrayAdapter(getContext(),R.layout.support_simple_spinner_dropdown_item,dhaka);
+        if (pos == 0) {
+            ArrayAdapter adapter1 = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, dhaka);
 
             adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             spinnerArea.setAdapter(adapter1);
 
-        }
-        else
-        {
-            ArrayAdapter adapter1 = new ArrayAdapter(getContext(),R.layout.support_simple_spinner_dropdown_item,sylhet);
+        } else {
+            ArrayAdapter adapter1 = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, sylhet);
 
             adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             spinnerArea.setAdapter(adapter1);
@@ -277,109 +273,115 @@ public class AddNewItemFragment extends Fragment  {
 
         }
 
-        ArrayAdapter adapter1 = new ArrayAdapter(getContext(),R.layout.support_simple_spinner_dropdown_item,category);
+        ArrayAdapter adapter1 = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, category);
 
         adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinnerCatagory.setAdapter(adapter1);
 
 
-        buttonSubmit.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick (View v){
-                    final String productRegion = spinnerRegion.getSelectedItem().toString();
-                    final String productArea = spinnerArea.getSelectedItem().toString();
-                    final String productCategory = spinnerCatagory.getSelectedItem().toString();
-                    final String productTitle = editTextTitle.getText().toString();
-                    final String productDescription = editTextDescription.getText().toString();
-                    final String productPrice = editTextPrice.getText().toString();
-                    int seleted = radioGroup.getCheckedRadioButtonId();
-                    radioButton = contentView.findViewById(seleted);
-                   final String productCondition  =  radioButton.getText().toString();
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String productRegion = spinnerRegion.getSelectedItem().toString();
+                final String productArea = spinnerArea.getSelectedItem().toString();
+                final String productCategory = spinnerCatagory.getSelectedItem().toString();
+                final String productTitle = editTextTitle.getText().toString();
+                final String productDescription = editTextDescription.getText().toString();
+                final String productPrice = editTextPrice.getText().toString();
+                int seleted = radioGroup.getCheckedRadioButtonId();
+                radioButton = contentView.findViewById(seleted);
+                final String productCondition = radioButton.getText().toString();
 
 
-                    if(!TextUtils.isEmpty(productArea) && !TextUtils.isEmpty(productRegion)&& !TextUtils.isEmpty(productCategory)&& !TextUtils.isEmpty(productCondition) && !TextUtils.isEmpty(productDescription)&&!TextUtils.isEmpty(productPrice) &&!TextUtils.isEmpty(productTitle))
-                    {
-                        File imageFile1 = new File(imageUri.getPath());
-                        File imageFile2 = new File(imageUri1.getPath());
-
-                        Log.d("checked","ok at compress");
-                        try {
-                            compressed1 = new Compressor(getContext())
-                                    .setMaxHeight(140)
-                                    .setMaxWidth(140)
-                                    .setQuality(50)
-                                    .compressToBitmap(imageFile1);
-
-                            compressed2 = new Compressor(getContext())
-                                    .setMaxHeight(140)
-                                    .setMaxWidth(140)
-                                    .setQuality(50)
-                                    .compressToBitmap(imageFile2);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    else
-                    {
-                        Toast.makeText(getContext(),"Input Invalid",Toast.LENGTH_SHORT);
-                        Log.d("error","Add new item invalid");
-
-                    }
-
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    compressed1.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                    byte[] thumbData1 = byteArrayOutputStream.toByteArray();
-
-                    UploadTask image_path = storageReference.child("user_image1").child(productIdString+".jpg").putBytes(thumbData1);
-                    image_path.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if(task.isSuccessful())
-                            {
-                                Toast.makeText(getContext(),"pic 1 is selected",Toast.LENGTH_SHORT);
-                                Log.d("checked","image1 done");
-
-
-
-
-                                ch = true;
-
-                            }
-                            else
-                            {
-                                Toast.makeText(getContext(),"problem with pic 1",Toast.LENGTH_SHORT);
-                                Log.d("error","error with first pic upload");
-
-                            }
-                        }
-                    });
-                    ByteArrayOutputStream byteArrayOutputStream1 = new ByteArrayOutputStream();
-                    compressed2.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream1);
-                    byte[] thumbData2 = byteArrayOutputStream1.toByteArray();
-
-                    UploadTask image_path2 = storageReference.child("user_image2").child(productIdString+".jpg").putBytes(thumbData2);
-                    image_path2.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if(task.isSuccessful())
-                            {
-                                Toast.makeText(getContext(),"pic 2 is selected",Toast.LENGTH_SHORT).show();
-                                ch1 = true;
-                                Log.d("checked","image2 done");
-                                storeData(productRegion , productArea, productCategory ,productTitle,productDescription,productPrice,productCondition);
-
-                            }
-                            else
-                            {
-                                Toast.makeText(getContext(),"problem with pic 2",Toast.LENGTH_SHORT).show();
-                                Log.d("error","error with second pic upload");
-                            }
-                        }
-                    });
+//                    if(!TextUtils.isEmpty(productArea) && !TextUtils.isEmpty(productRegion)&& !TextUtils.isEmpty(productCategory)&& !TextUtils.isEmpty(productCondition) && !TextUtils.isEmpty(productDescription)&&!TextUtils.isEmpty(productPrice) &&!TextUtils.isEmpty(productTitle))
+//                    {
+//                        File imageFile1 = new File(imageUri.getPath());
+//                        File imageFile2 = new File(imageUri1.getPath());
+//
+//                        Log.d("checked","ok at compress");
+//                        try {
+//                            compressed1 = new Compressor(getContext())
+//                                    .setMaxHeight(140)
+//                                    .setMaxWidth(140)
+//                                    .setQuality(50)
+//                                    .compressToBitmap(imageFile1);
+//
+//                            compressed2 = new Compressor(getContext())
+//                                    .setMaxHeight(140)
+//                                    .setMaxWidth(140)
+//                                    .setQuality(50)
+//                                    .compressToBitmap(imageFile2);
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                    else
+//                    {
+//                        Toast.makeText(getContext(),"Input Invalid",Toast.LENGTH_SHORT);
+//                        Log.d("error","Add new item invalid");
+//
+//                    }
+//
+//                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                    compressed1.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//                    byte[] thumbData1 = byteArrayOutputStream.toByteArray();
+//
+//                    UploadTask image_path = storageReference.child("user_image1").child(productIdString+".jpg").putBytes(thumbData1);
+//                    image_path.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                            if(task.isSuccessful())
+//                            {
+//                                Toast.makeText(getContext(),"pic 1 is selected",Toast.LENGTH_SHORT);
+//                                Log.d("checked","image1 done");
+//                                imageUriString= task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+//                            Log.d("checked","imageUriString "+ imageUriString);
+//                                ch = true;
+//                                if(ch1)
+//                                {
+//                                    storeData(productRegion , productArea, productCategory ,productTitle,productDescription,productPrice,productCondition);
+//                                }
+//
+//                            }
+//                            else
+//                            {
+//                                Toast.makeText(getContext(),"problem with pic 1",Toast.LENGTH_SHORT);
+//                                Log.d("error","error with first pic upload");
+//
+//                            }
+//                        }
+//                    });
+//                    ByteArrayOutputStream byteArrayOutputStream1 = new ByteArrayOutputStream();
+//                    compressed2.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream1);
+//                    byte[] thumbData2 = byteArrayOutputStream1.toByteArray();
+//
+//                    UploadTask image_path2 = storageReference.child("user_image2").child(productIdString+".jpg").putBytes(thumbData2);
+//                    image_path2.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//
+//                        @Override
+//                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                            if(task.isSuccessful())
+//                            {
+//                                Toast.makeText(getContext(),"pic 2 is selected",Toast.LENGTH_SHORT).show();
+//                                ch1 = true;
+//                                Log.d("checked","image2 done");
+//                                imageUriString1 = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+//                                Log.d("checked","imageUriString "+ imageUriString1);
+//                                if(ch) {
+//
+//
+//                                    storeData(productRegion, productArea, productCategory, productTitle, productDescription, productPrice, productCondition);
+//                                }
+//                            }
+//                            else
+//                            {
+//                                Toast.makeText(getContext(),"problem with pic 2",Toast.LENGTH_SHORT).show();
+//                                Log.d("error","error with second pic upload");
+//                            }
+//                        }
+//                    });
 //                    if(ch && ch1)
 //                    {
 //                        Log.d("checked","store called");
@@ -391,9 +393,119 @@ public class AddNewItemFragment extends Fragment  {
 //
 //                    }
 
+                if (!TextUtils.isEmpty(productArea) && !TextUtils.isEmpty(productRegion) && !TextUtils.isEmpty(productCategory) && !TextUtils.isEmpty(productCondition) && !TextUtils.isEmpty(productDescription) && !TextUtils.isEmpty(productPrice) && !TextUtils.isEmpty(productTitle)) {
+
+                    final StorageReference riversRef = storageReference.child("user_image1/" + productId + ".jpg");
+                    UploadTask uploadTask = riversRef.putFile(imageUri);
+
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageUriString = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                            Log.d("checked 1", imageUriString);
+
+                            Log.d("checked", "image1 upload task ok");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("checked", "image upload failed 1");
+
+
+                        }
+                    });
+
+                    final StorageReference riversRef1 = storageReference.child("user_image2/" + productId + ".jpg");
+                    UploadTask uploadTask1 = riversRef1.putFile(imageUri1);
+
+                    uploadTask1.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+
+                            Log.d("checked", "image2 upload task ok");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("checked", "image upload failed 2");
+
+
+                        }
+                    });
+
+                    Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+                            return riversRef.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+
+
+                                imageUriString = downloadUri.toString();
+                                Log.d("checked 1", downloadUri.toString());
+                                ch = true;
+                                if (ch1) {
+                                    storeData(productRegion, productArea, productCategory, productTitle, productDescription, productPrice, productCondition);
+                                }
+
+
+                            } else {
+                                Log.d("checked", "download uri error 1");
+
+                            }
+                        }
+                    });
+
+                    Task<Uri> uriTask1 = uploadTask1.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+                            return riversRef1.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+
+
+                                imageUriString1 = downloadUri.toString();
+                                ch1 = true;
+
+
+                                if(ch)
+                                {
+                                    storeData(productRegion, productArea, productCategory, productTitle, productDescription, productPrice, productCondition);
+                                }
+                                Log.d("checked 2", downloadUri.toString());
+                            } else {
+                                Log.d("checked", "download uri error 2");
+
+                            }
+                        }
+                    });
+                }
+                else
+                {
 
                 }
-            });
+
+
+
+            }
+        });
+
+
 
 
         return contentView;
@@ -411,8 +523,7 @@ public class AddNewItemFragment extends Fragment  {
         productData.put("productDescription",productDescription);
         productData.put("productPrice",productPrice);
         productData.put("productCondition",productCondition);
-        productData.put("productImage1",imageUri.toString());
-        productData.put("productImage2",imageUri1.toString());
+
         firebaseFirestore.collection("products_of_market").document(productIdString).set(productData).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

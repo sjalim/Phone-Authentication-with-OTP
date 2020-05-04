@@ -8,21 +8,20 @@
     android:background="@color/white"
     android:id="@+id/root_layout">
 
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cultivation_rv"
+        android:id="@+id/market_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_input"
-        tools:listitem="@layout/customlist_item_market"/>
-
-
-
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/customlist_item_market" />
 
     <EditText
         android:drawablePadding="8dp"
@@ -49,13 +48,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:src="@drawable/floating_plus"
+        android:src="@drawable/ic_add_black_24dp"
+        app:backgroundTint="#0979D3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.918"
+        app:layout_constraintHorizontal_bias="0.915"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.835" />
+        app:layout_constraintVertical_bias="0.845" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

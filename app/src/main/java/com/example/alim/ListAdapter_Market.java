@@ -2,14 +2,14 @@ package com.example.alim;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,102 +21,89 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-public class ListAdapter_Market extends RecyclerView.Adapter<ListAdapter_Market.ListViewHolder> implements Filterable {
 
-    Context mContext;
-    List<CustomListItem_Market> mData;
-    List<CustomListItem_Market> mDataFiltered;
+public class ListAdapter_Market extends FirestoreRecyclerAdapter<productsListOfMarketFirestore, ListAdapter_Market.ListViewHolder> {
+   ArrayList<CustomListItem_Market> mData;
+   Context mContext;
 
-    public ListAdapter_Market(Context mContext, List<CustomListItem_Market> mData) {
-        this.mContext = mContext;
-        this.mData = mData;
-        this.mDataFiltered = mData;
+    public ListAdapter_Market(@NonNull FirestoreRecyclerOptions<productsListOfMarketFirestore> options) {
+        super(options);
+
+
     }
 
+//    public ListAdapter_Market(@NonNull FirestoreRecyclerOptions<productsListOfMarketFirestore> options, ArrayList<CustomListItem_Market> mData) {
+//        super(options);
+//        this.mData = mData;
+//    }
+
     @Override
-    public Filter getFilter() {
+    public ListAdapter_Market.ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-
-                String Key = constraint.toString();
-                if (Key.isEmpty()) {
-
-                    mDataFiltered = mData ;
-
-                }
-                else {
-                    List<CustomListItem_Market> lstFiltered = new ArrayList<>();
-                    for (CustomListItem_Market row : mData) {
-
-                        if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
-                            lstFiltered.add(row);
-                        }
-
-                    }
-
-                    mDataFiltered = lstFiltered;
-
-                }
-
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values= mDataFiltered;
-                return filterResults;
-
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-
-
-                mDataFiltered = (List<CustomListItem_Market>) results.values;
-                notifyDataSetChanged();
-
-            }
-        };
-
+        View layout;
+        mContext = parent.getContext();
+        layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.customlist_item_market, parent, false);
+        return new ListViewHolder(layout);
 
 
     }
 
     @NonNull
     @Override
-    public ListAdapter_Market.ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    protected void onBindViewHolder(@NonNull final ListViewHolder holder, int position, @NonNull productsListOfMarketFirestore model) {
+//        holder.imageView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_transition_animation));
+//        holder.itemContainer.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
+
+
+        holder.title.setText(model.getProductTitle());
+        holder.price.setText(model.getProductPrice());
+        holder.productId.setText(model.getProductId());
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://alim-443b2.appspot.com/user_image1/").child(model.getProductId() + ".jpg");
+        try {
+            final File file = File.createTempFile("image", "jpg");
+            storageReference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    holder.imageView.setImageBitmap(bitmap);
+
+                }
+            });
+//            Log.d("checked",model.getProductTitle()+" "+model.getProductId()+" "+model.getProductPrice());
 
 
 
+//            mData.add(new CustomListItem_Market(model.getProductTitle(),model.getProductId(),model.getProductPrice()));
 
-        View layout;
-        layout = LayoutInflater.from(mContext).inflate(R.layout.customlist_item_cultivation,parent,false);
-        return new ListViewHolder(layout);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ListAdapter_Market.ListViewHolder holder, int position) {
-        holder.imageView.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
-        holder.itemContainer.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-
-
-        holder.title.setText(mDataFiltered.get(position).getTitle());
-//        holder.imageView.setImageResource(mDataFiltered.get(position).getUserPhoto());
-
+    public ArrayList<CustomListItem_Market> getmData() {
+        return mData;
     }
 
-    @Override
-    public int getItemCount() {
-        return  mDataFiltered.size();
-    }
-    public class ListViewHolder extends RecyclerView.ViewHolder{
+    class ListViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title ;
+        TextView title, price,productId;
+
         ImageView imageView;
         RelativeLayout itemContainer;
 
@@ -127,32 +114,34 @@ public class ListAdapter_Market extends RecyclerView.Adapter<ListAdapter_Market.
                 public void onClick(View v) {
 
 
-                    Fragment itemFragment =  CultivationItemDetails.newInstance("","");
-                    if(itemFragment!=null) {
+                    Fragment itemFragment = MarketItemDetails.newInstance("", "");
+                    if (itemFragment != null) {
 
-                        FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+                        FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                         Bundle args = new Bundle();
 
-                        args.putString("pass", title.getText().toString());
+                        args.putString("productId", productId.getText().toString());
+
                         itemFragment.setArguments(args);
 
                         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
                         fragmentTransaction.replace(R.id.container, itemFragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
-                    }
-                    else
-                    {
-                        Log.d("error","null exception");
+                    } else {
+                        Log.d("error", "null exception");
                     }
                 }
             });
 
-            itemContainer = itemView.findViewById(R.id.item_container_cultivation);
-            title = itemView.findViewById(R.id.text_view_item_title);
-            imageView = itemView.findViewById(R.id.image_view_item);
+            itemContainer = itemView.findViewById(R.id.item_container_market);
+            title = itemView.findViewById(R.id.textView_item_title_market);
+            imageView = itemView.findViewById(R.id.imageView_item_market);
+            price = itemView.findViewById(R.id.textView_price);
+            productId = itemView.findViewById(R.id.textView_productId);
         }
     }
+
 }
